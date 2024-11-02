@@ -35,6 +35,7 @@ def dataProcessing(weights, matrix):
                 
             elif matrix[i][j] == '*':
                 stones.append({"weight": weights[index], "position": Pair(i, j)})
+                board[i][j].type = '$'
                 board[i][j].weight = weights[index]
                 index += 1
                 goals.append(Pair(i, j))
@@ -57,10 +58,10 @@ stones, player, goals, board = dataProcessing(weights, matrix)
 # print("\nBoard: ", board)
 
 # uniformCostSearch(board, player, goals)
-path, cost, time, memoryUsed, cntNode = AStarAlgorithm(board, player, goals)
+# path, cost, time, memoryUsed, cntNode = AStarAlgorithm(board, player, goals)
 # bfs(board, player, goals)
-# dfs(board, player, goals)
+path, cost, time, memoryUsed, cntNode = dfs(board, player, goals)
 
-writeFile("output.txt", "A_Star", path, cost, time, memoryUsed, cntNode)
+writeFile("output.txt", "DFS", path, cost, time, memoryUsed, cntNode)
 
 
