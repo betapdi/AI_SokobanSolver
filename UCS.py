@@ -1,12 +1,14 @@
 import copy
 import heapq
 from classes import Node, directions
+import time, psutil, os
 
 def uniformCostSearch(originalBoard, originalPlayer, originalGoals):
     board = copy.deepcopy(originalBoard)
     goals = copy.deepcopy(originalGoals)
     player = originalPlayer
     
+    startTime = time.time()
     visited = set()
     startNode = Node(board, player, goals, "", 0)
     pq = []
@@ -19,6 +21,8 @@ def uniformCostSearch(originalBoard, originalPlayer, originalGoals):
     #     for c in range(len(board[r])):
     #         print(board[r][c].type, end='')
     #     print()
+    
+    cntNode = 1
     
     while pq:
         heapq.heapify(pq)
@@ -43,8 +47,20 @@ def uniformCostSearch(originalBoard, originalPlayer, originalGoals):
                 newNode = node.move(dir)
                 if (newNode.ID not in visited):
                     heapq.heappush(pq, newNode)
+                    cntNode += 1
     
     path = node.path
     print("\nResult path: ", path)
+    
+    print("\nTotal Cost: ", node.cost)
+    
+    endTime = time.time()
+    elapsedTime = endTime - startTime
+    print("\nTime in seconds: ", elapsedTime)
+    
+    memUsed = psutil.Process(os.getpid()).memory_info().rss / 1024 ** 2
+    print("\nMemory usage in MB: ", memUsed)
+    
+    return path, node.cost, elapsedTime, memUsed, cntNode
     
     

@@ -114,12 +114,12 @@ class Node:
         
         player = nextPos
         goals = self.goals
-        path = self.path + direction["name"]
         cost = self.cost + 1 + self.board[nextPos.x][nextPos.y].weight
         
         # Case 1: Free cell movement
         if (self.board[nextPos.x][nextPos.y].type != '$'):
             board = copy.deepcopy(self.board)
+            path = self.path + direction["name"].lower()
         
         # Case 2: Pushing stone
         else:
@@ -128,6 +128,7 @@ class Node:
             board = copy.deepcopy(self.board)
             board[secondNextPos.x][secondNextPos.y] = board[nextPos.x][nextPos.y]
             board[nextPos.x][nextPos.y] = Cell(' ', 0)
+            path = self.path + direction["name"]
         
         return Node(board, player, goals, path, cost)
         

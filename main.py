@@ -1,5 +1,5 @@
 import os
-from inOut import readFile
+from inOut import readFile, writeFile
 from classes import Pair, Cell
 
 from UCS import uniformCostSearch
@@ -33,6 +33,17 @@ def dataProcessing(weights, matrix):
                 goals.append(Pair(i, j))
                 board[i][j].type = ' '
                 
+            elif matrix[i][j] == '*':
+                stones.append({"weight": weights[index], "position": Pair(i, j)})
+                board[i][j].weight = weights[index]
+                index += 1
+                goals.append(Pair(i, j))
+                
+            elif matrix[i][j] == '+': 
+                board[i][j].type =  ' '
+                goals.append(Pair(i, j))
+                player = Pair(i, j)
+                
     return stones, player, goals, board
 
 filePath = "input.txt"
@@ -46,8 +57,10 @@ stones, player, goals, board = dataProcessing(weights, matrix)
 # print("\nBoard: ", board)
 
 # uniformCostSearch(board, player, goals)
-# AStarAlgorithm(board, player, goals)
+path, cost, time, memoryUsed, cntNode = AStarAlgorithm(board, player, goals)
 # bfs(board, player, goals)
-dfs(board, player, goals)
+# dfs(board, player, goals)
+
+writeFile("output.txt", "A_Star", path, cost, time, memoryUsed, cntNode)
 
 

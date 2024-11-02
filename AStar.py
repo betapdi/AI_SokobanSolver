@@ -1,6 +1,7 @@
 import copy
 import heapq
 from classes import Node, directions, Pair
+import time, psutil, os
 
 def manhattanDistance(node):
     totalCost = 0
@@ -32,9 +33,14 @@ def AStarAlgorithm(originalBoard, originalPlayer, originalGoals):
     player = originalPlayer
     
     visited = set()
+    
+    startTime = time.time()
+    
     startNode = Node(board, player, goals, "", 0)
     pq = []
     heapq.heappush(pq, startNode)
+    
+    cntNode = 1
     
     while pq:
         heapq.heapify(pq)
@@ -55,8 +61,18 @@ def AStarAlgorithm(originalBoard, originalPlayer, originalGoals):
                 
                 if (newNode.ID not in visited):
                     heapq.heappush(pq, newNode)
+                    cntNode += 1
     
     path = node.path
     print("\nResult path: ", path)
     
+    print("\nTotal Cost: ", node.cost)
     
+    endTime = time.time()
+    elapsedTime = endTime - startTime
+    print("\nTime in seconds: ", elapsedTime)
+    
+    memUsed = psutil.Process(os.getpid()).memory_info().rss / 1024 ** 2
+    print("\nMemory usage in MB: ", memUsed)
+    
+    return path, node.cost, elapsedTime, memUsed, cntNode

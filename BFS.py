@@ -1,6 +1,7 @@
 import copy
 import queue
 from classes import Node, directions
+import time, psutil, os
 
 def bfs(originalBoard, originalPlayer, originalGoals):
     board = copy.deepcopy(originalBoard)
@@ -11,6 +12,7 @@ def bfs(originalBoard, originalPlayer, originalGoals):
     startNode = Node(board, player, goals, "", 0)
     q = queue.Queue()
 
+    startTime = time.time()
     q.put(startNode)  
     visited.add(startNode.ID)  
     # print(board)
@@ -19,6 +21,8 @@ def bfs(originalBoard, originalPlayer, originalGoals):
     #     for c in range(len(board[r])):
     #         print(board[r][c].type, end='')
     #     print()
+    
+    cntNode = 1
     
     while not q.empty():
         node = q.get()
@@ -39,9 +43,19 @@ def bfs(originalBoard, originalPlayer, originalGoals):
                 newNode = node.move(dir)
                 if (newNode.ID not in visited):
                     q.put(newNode)
+                    cntNode += 1
                     visited.add(newNode.ID)
     
     path = node.path
     print("\nResult path: ", path)
     
+    print("\nTotal Cost: ", node.cost)
     
+    endTime = time.time()
+    elapsedTime = endTime - startTime
+    print("\nTime in seconds: ", elapsedTime)
+    
+    memUsed = psutil.Process(os.getpid()).memory_info().rss / 1024 ** 2
+    print("\nMemory usage in MB: ", memUsed)
+    
+    return path, node.cost, elapsedTime, memUsed, cntNode
